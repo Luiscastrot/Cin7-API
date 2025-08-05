@@ -86,6 +86,7 @@ def process_sales_orders(sales_orders, user_name):
     line_items = sales_orders.get('lineItems', [])
     currency_rate = float(sales_orders.get('currencyRate', 1))
     invoice_date = parse_date(sales_orders.get('invoiceDate'))
+    estimated_delivery_date = parse_date(sales_orders.get('estimatedDeliveryDate'))
     discount_total = sales_orders.get('discountTotal', 0)
 
      # Create a dictionary to map full names to abbreviations
@@ -119,13 +120,12 @@ def process_sales_orders(sales_orders, user_name):
             'reference': sales_orders.get('reference'),
             'invoiceNumber':sales_orders.get('invoiceNumber'),
             'customerOrderNo':sales_orders.get('customerOrderNo'),
-            'estimatedDeliveryDate': item.get('estimatedDeliveryDate',''),
+            'estimatedDeliveryDate': estimated_delivery_date.strftime('%d/%m/%Y') if invoice_date else '',
             'company': sales_orders.get('company'),
             'firstName': sales_orders.get('firstName'),
             'lastName': sales_orders.get('lastName'),
             'projectName': sales_orders.get('projectName'),
             'channel': sales_orders.get('source'),
-            'taxRate':sales_orders.get('taxRate'),
             'currencyCode': sales_orders.get('currencyCode'),
             'lineItemcode':item.get('code',''),
             'lineItemName': item.get('name', ''),
@@ -175,7 +175,7 @@ def process_user(user):
 def main():
     start_date, end_date = calculate_date_range()
     
-    fieldnames = ['sourceUser','reference', 'invoiceNumber','customerOrderNo','estimatedDeliveryDate','company', 'firstName', 'lastName', 'projectName','taxRate',
+    fieldnames = ['sourceUser','reference', 'invoiceNumber','customerOrderNo','estimatedDeliveryDate','company', 'firstName', 'lastName', 'projectName',
                   'channel', 'currencyCode','lineItemcode', 'lineItemName','lineItemQty','lineItemoption3', 'lineItemUnitPrice', 'lineItemDiscount', 'discountTotal','invoiceDate']
     
     file_name = f"Sales_Orders_{start_date.strftime('%Y%m%d')}_{end_date.strftime('%Y%m%d')}.csv"
