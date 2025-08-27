@@ -172,32 +172,39 @@ def process_user(user):
 
 def main():
     start_date, end_date = calculate_date_range()
-    
-    fieldnames = ['sourceUser','reference','creditNoteNumber','salesReference','createdDate', 'company', 'firstName', 'lastName', 'projectName', 
-                  'channel', 'currencyCode', 'lineItemcode', 'lineItemName','lineItemQty','lineItemoption3', 'lineItemUnitPrice', 'lineItemDiscount', 'discountTotal','completedDate']
-    
-    file_name = f"Credit_Notes_{start_date.strftime('%Y%m%d')}_{end_date.strftime('%Y%m%d')}.csv"
-    env_file = os.getenv('GITHUB_ENV') 
-    with open(env_file, "a") as env_file:    
-        env_file.write(f"ENV_CUSTOM_DATE_FILE={file_name}")
- 
-    all_credit_notes = []
+    fieldnames = ['sourceUser','reference','creditNoteNumber','salesReference','createdDate','company',
+                  'firstName','lastName','projectName','channel','currencyCode','lineItemcode','lineItemName',
+                  'lineItemQty','lineItemoption3','lineItemUnitPrice','lineItemDiscount','discountTotal','completedDate']
 
-    # Process users in parallel
+    file_name = f"Credit_Notes_{start_date.strftime('%Y%m%d')}_{end_date.strftime('%Y%m%d')}.csv"
+
+    # Save inside GITHUB_WORKSPACE
+    workspace = os.getenv('GITHUB_WORKSPACE', os.getcwd())
+    file_path = os.path.join(workspace, file_name)
+
+    all_credit_notes = []
     with ThreadPoolExecutor(max_workers=4) as executor:
         results = executor.map(process_user, USERS)
         for user_credit_notes in results:
             all_credit_notes.extend(user_credit_notes)
 
-    # Write all credit notes to a single CSV file
-    with open(file_name, mode='w', newline='', encoding='utf-8') as csv_file:
+    with open(file_path, mode='w', newline='', encoding='utf-8') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
         for credit_note in all_credit_notes:
             writer.writerow(credit_note)
 
-    logging.info(f"Data successfully written to {file_name}")
-    logging.info(f"Date range used for filtering: Start: {start_date.strftime('%Y-%m-%d %H:%M:%S %Z')} - End: {end_date.strftime('%Y-%m-%d %H:%M:%S %Z')}")
+    logging.info(f"Data successfully written to {file_path}")
+    logging.info(f"Date range used: Start: {start_date.strftime('%Y-%m-%d %H:%M:%S %Z')} - End: {end_date.strftime('%Y-%m-%d %H:%M:%S %Z')}")
+
+    # Export filename for workflow
+    gh_env = os.getenv('GITHUB_ENV')
+    if gh_env:
+        with open(gh_env, "a") as env_file:
+            env_file.write(f"ENV_CUSTOM_DATE_FILE={file_name}\n")
+        logging.info(f"Exported ENV_CUSTOM_DATE_FILE={file_name}")
+    else:
+        logging.warning("GITHUB_ENV not set; cannot export ENV_CUSTOM_DATE_FILE.")
 
 if __name__ == "__main__":
     main()
