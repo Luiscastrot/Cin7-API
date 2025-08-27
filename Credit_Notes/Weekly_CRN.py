@@ -201,9 +201,13 @@ def main():
     # Exporta la ruta EXACTA para el workflow
     gh_env = os.getenv('GITHUB_ENV')
     output_filename_abs = os.path.abspath(output_filename) 
+    output_filename_base = os.path.basename(output_filename)  # 👈 solo el nombre del archivo
     if gh_env:
         with open(gh_env, "a") as env_file:
             env_file.write(f"ENV_CUSTOM_DATE_FILE={output_filename_abs}\n")
+            env_file.write(f"ENV_CUSTOM_DATE_FILE_NAME={output_filename_base}\n")  # 👈 export extra
         logging.info(f"Exported ENV_CUSTOM_DATE_FILE={output_filename_abs}")
+        logging.info(f"Exported ENV_CUSTOM_DATE_FILE_NAME={output_filename_base}")
+
     else:
         logging.warning("GITHUB_ENV not set; cannot export ENV_CUSTOM_DATE_FILE.")
