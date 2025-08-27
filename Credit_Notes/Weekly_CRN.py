@@ -179,10 +179,10 @@ def main():
                   'lineItemQty','lineItemoption3','lineItemUnitPrice','lineItemDiscount','discountTotal','completedDate']
 
     file_name = f"Credit_Notes_{start_date.strftime('%Y%m%d')}_{end_date.strftime('%Y%m%d')}.csv"
-    DROPBOX_UPLOAD_PATH = f"/Power BI Data Warehouse/Source of truth/2025/{file_name}"  #  Final file in Dropbox
 
-    # Save inside GITHUB_WORKSPACE
-    output_filename = f"{file_name}"  # Carpeta dentro del repo
+    # Guarda SIEMPRE en la carpeta Credit_Notes/
+    output_filename = os.path.join("Credit_Notes", file_name)
+    os.makedirs("Credit_Notes", exist_ok=True)
 
     all_credit_notes = []
     with ThreadPoolExecutor(max_workers=4) as executor:
@@ -197,21 +197,12 @@ def main():
             writer.writerow(credit_note)
 
     logging.info(f"Data successfully written locally at {output_filename}")
-    logging.info(f"Date range used: Start: {start_date.strftime('%Y-%m-%d %H:%M:%S %Z')} - End: {end_date.strftime('%Y-%m-%d %H:%M:%S %Z')}")
 
-
-
-    # Export filename for workflow
+    # Exporta la ruta EXACTA para el workflow
     gh_env = os.getenv('GITHUB_ENV')
-    workspace = os.getenv('GITHUB_WORKSPACE', os.getcwd())
-    file_path = os.path.join(workspace, file_name)
-    
     if gh_env:
         with open(gh_env, "a") as env_file:
-            env_file.write(f"ENV_CUSTOM_DATE_FILE={file_name}\n")
-        logging.info(f"Exported ENV_CUSTOM_DATE_FILE={file_name}")
+            env_file.write(f"ENV_CUSTOM_DATE_FILE={output_filename}\n")
+        logging.info(f"Exported ENV_CUSTOM_DATE_FILE={output_filename}")
     else:
         logging.warning("GITHUB_ENV not set; cannot export ENV_CUSTOM_DATE_FILE.")
-
-if __name__ == "__main__":
-    main()
