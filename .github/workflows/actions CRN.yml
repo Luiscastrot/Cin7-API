@@ -34,12 +34,16 @@ jobs:
       - name: Debug ENV
         run: echo "ENV_CUSTOM_DATE_FILE=${{ env.ENV_CUSTOM_DATE_FILE }}"
 
+      - name: Set ENV vars from Python output
+        run: |
+          echo "SOURCE_FILE=$(cat $GITHUB_ENV | grep ENV_CUSTOM_DATE_FILE | cut -d '=' -f2)" >> $GITHUB_ENV
+          echo "DEST_FILE=$(cat $GITHUB_ENV | grep ENV_CUSTOM_DATE_FILE_NAME | cut -d '=' -f2)" >> $GITHUB_ENV
+
       - name: Upload File to Dropbox
         uses: ./upload-dropbox-action
         with:
           DROPBOX_APP_KEY: ${{ secrets.DROPBOX_APP_KEY }}
           DROPBOX_APP_SECRET: ${{ secrets.DROPBOX_APP_SECRET }}
           DROPBOX_REFRESH_TOKEN: ${{ secrets.DROPBOX_REFRESH_TOKEN }}
-          SOURCE_PATH: ${{ env.ENV_CUSTOM_DATE_FILE }}            # ruta completa al CSV en runner
-          DEST_PATH: /Power BI Data Warehouse/Source of truth/2025/${{ env.ENV_CUSTOM_DATE_FILE_NAME }}  # solo nombre
-
+          SOURCE_PATH: ${{ env.SOURCE_FILE }}
+          DEST_PATH: /Power BI Data Warehouse/Source of truth/2025/${{ env.DEST_FILE }}
