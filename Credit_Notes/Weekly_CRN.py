@@ -182,7 +182,7 @@ def main():
     DROPBOX_UPLOAD_PATH = f"/Power BI Data Warehouse/Source of truth/2025/{file_name}"  #  Final file in Dropbox
 
     # Save inside GITHUB_WORKSPACE
-    output_filename = f"Credit_Notes/{file_name}"  # Carpeta dentro del repo
+    output_filename = f"{file_name}"  # Carpeta dentro del repo
 
     all_credit_notes = []
     with ThreadPoolExecutor(max_workers=4) as executor:
@@ -208,7 +208,7 @@ def main():
     
     if gh_env:
         with open(gh_env, "a") as env_file:
-            env_file.write(f"ENV_CUSTOM_DATE_FILE={Credit_Notes/file_name}\n")
+            env_file.write(f"ENV_CUSTOM_DATE_FILE={file_name}\n")
         logging.info(f"Exported ENV_CUSTOM_DATE_FILE={file_name}")
     else:
         logging.warning("GITHUB_ENV not set; cannot export ENV_CUSTOM_DATE_FILE.")
