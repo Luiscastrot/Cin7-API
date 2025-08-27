@@ -1,4 +1,4 @@
-name: Merge Cin7 Sales Files
+name: Check CRN
 
 on:
   schedule:

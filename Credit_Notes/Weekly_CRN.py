@@ -22,28 +22,6 @@ ARIB_KEY = os.environ["ARIB_KEY"]
 ARNL_KEY = os.environ["ARNL_KEY"]
 ARF_KEY = os.environ["ARF_KEY"]
 
-# --- Dropbox credentials ---
-DROPBOX_CLIENT_ID = os.environ["DROPBOX_APP_KEY"]
-DROPBOX_CLIENT_SECRET = os.environ["DROPBOX_APP_SECRET"]
-DROPBOX_REFRESH_TOKEN = os.environ["DROPBOX_REFRESH_TOKEN"]
-
-
-
-def get_new_access_token():
-    response = requests.post(
-        "https://api.dropbox.com/oauth2/token",
-        data={
-            "grant_type": "refresh_token",
-            "refresh_token": DROPBOX_REFRESH_TOKEN,
-            "client_id": DROPBOX_CLIENT_ID,
-            "client_secret": DROPBOX_CLIENT_SECRET
-        }
-    )
-    response.raise_for_status()
-    return response.json()["access_token"]
-
-DROPBOX_ACCESS_TOKEN = get_new_access_token()
-
 
 # List of user credentials
 USERS = [
@@ -221,23 +199,6 @@ def main():
     logging.info(f"Data successfully written locally at {output_filename}")
     logging.info(f"Date range used: Start: {start_date.strftime('%Y-%m-%d %H:%M:%S %Z')} - End: {end_date.strftime('%Y-%m-%d %H:%M:%S %Z')}")
 
-    # --- Upload to Dropbox ---
-    with open(output_filename, "rb") as f:
-        data = f.read()
-
-    upload_headers = {
-        "Authorization": f"Bearer {DROPBOX_ACCESS_TOKEN}",
-        "Dropbox-API-Arg": f'{{"path": "{DROPBOX_UPLOAD_PATH}", "mode": "overwrite"}}',
-        "Content-Type": "application/octet-stream"
-    }
-
-    upload_response = requests.post("https://content.dropboxapi.com/2/files/upload", headers=upload_headers, data=data)
-
-    if upload_response.status_code == 200:
-        logging.info("✅ File uploaded to Dropbox successfully!")
-    else:
-        logging.error(f"❌ Error uploading to Dropbox: {upload_response.status_code}")
-        logging.error(upload_response.text)
 
 
     # Export filename for workflow
