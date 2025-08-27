@@ -199,6 +199,9 @@ def main():
 
     # Export filename for workflow
     gh_env = os.getenv('GITHUB_ENV')
+    workspace = os.getenv('GITHUB_WORKSPACE', os.getcwd())
+    file_path = os.path.join(workspace, file_name)
+    
     if gh_env:
         with open(gh_env, "a") as env_file:
             env_file.write(f"ENV_CUSTOM_DATE_FILE={file_name}\n")
