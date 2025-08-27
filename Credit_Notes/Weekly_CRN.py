@@ -207,9 +207,12 @@ def main():
         with open(gh_env, "a") as env_file:
             env_file.write(f"ENV_CUSTOM_DATE_FILE={output_filename_abs}\n")       
             env_file.write(f"ENV_CUSTOM_DATE_FILE_NAME={output_filename_base}\n")
-            
+
         logging.info(f"Exported ENV_CUSTOM_DATE_FILE={output_filename_abs}")
         logging.info(f"Exported ENV_CUSTOM_DATE_FILE_NAME={output_filename_base}")
 
     else:
         logging.warning("GITHUB_ENV not set; cannot export ENV_CUSTOM_DATE_FILE.")
+
+    if __name__ == "__main__":
+        main()
