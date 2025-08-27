@@ -41,4 +41,4 @@ jobs:
           DROPBOX_APP_SECRET: ${{ secrets.DROPBOX_APP_SECRET }}
           DROPBOX_REFRESH_TOKEN: ${{ secrets.DROPBOX_REFRESH_TOKEN }}
           SOURCE_PATH: ${{ env.ENV_CUSTOM_DATE_FILE }}
-          DEST_PATH: /Power BI Data Warehouse/Source of truth/2025/${{ env.ENV_CUSTOM_DATE_FILE##*/ }}
+          DEST_PATH: /Power BI Data Warehouse/Source of truth/2025/${{ env.ENV_CUSTOM_DATE_FILE }}
