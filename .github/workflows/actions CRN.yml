@@ -34,11 +34,6 @@ jobs:
       - name: Debug ENV
         run: echo "ENV_CUSTOM_DATE_FILE=${{ env.ENV_CUSTOM_DATE_FILE }}"
 
-      - name: Set ENV vars from Python output
-        run: |
-          echo "SOURCE_FILE=$(cat $GITHUB_ENV | grep ENV_CUSTOM_DATE_FILE | cut -d '=' -f2)" >> $GITHUB_ENV
-          echo "DEST_FILE=$(cat $GITHUB_ENV | grep ENV_CUSTOM_DATE_FILE_NAME | cut -d '=' -f2)" >> $GITHUB_ENV
-
       - name: Upload File to Dropbox
         uses: ./upload-dropbox-action
         with:
