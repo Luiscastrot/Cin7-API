@@ -214,5 +214,5 @@ def main():
     else:
         logging.warning("GITHUB_ENV not set; cannot export ENV_CUSTOM_DATE_FILE.")
 
-    if __name__ == "__main__":
-        main()
+if __name__ == "__main__":
+    main()
