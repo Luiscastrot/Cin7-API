@@ -208,7 +208,7 @@ def main():
     
     if gh_env:
         with open(gh_env, "a") as env_file:
-            env_file.write(f"ENV_CUSTOM_DATE_FILE={file_name}\n")
+            env_file.write(f"ENV_CUSTOM_DATE_FILE=Credit_Notes/{file_name}\n")
         logging.info(f"Exported ENV_CUSTOM_DATE_FILE={file_name}")
     else:
         logging.warning("GITHUB_ENV not set; cannot export ENV_CUSTOM_DATE_FILE.")
