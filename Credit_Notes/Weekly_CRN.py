@@ -185,11 +185,14 @@ def main():
     os.makedirs("tmp_files", exist_ok=True)
 
     all_credit_notes = []
+
+    # Process users in parallel
     with ThreadPoolExecutor(max_workers=4) as executor:
         results = executor.map(process_user, USERS)
         for user_credit_notes in results:
             all_credit_notes.extend(user_credit_notes)
 
+    # Write all credit notes to a single CSV file
     with open(output_filename, mode='w', newline='', encoding='utf-8') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
