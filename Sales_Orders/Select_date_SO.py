@@ -143,7 +143,7 @@ def process_sales_orders(sales_orders, user_name):
 def process_user(user):
     headers = get_auth_header(user['username'], user['key'])
     start_date, end_date = calculate_date_range()
-    all_sales_orderss = []
+    all_sales_orders = []
     page = 1
 
     while True:
@@ -162,7 +162,7 @@ def process_user(user):
         for sales_orders in data:
             try:
                 if is_valid_sales_orders(sales_orders, start_date, end_date):
-                    all_sales_orderss.extend(process_sales_orders(sales_orders, user['username']))
+                    all_sales_orders.extend(process_sales_orders(sales_orders, user['username']))
             except Exception as e:
                 logging.error(f"Error processing sales order: {sales_orders}. Error: {e}")
 
@@ -170,7 +170,7 @@ def process_user(user):
         page += 1
         time.sleep(0.5)  # Rate limiting
 
-    return all_sales_orderss
+    return all_sales_orders
 
 def main():
     start_date, end_date = calculate_date_range()
