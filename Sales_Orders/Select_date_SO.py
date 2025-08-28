@@ -184,7 +184,7 @@ def main():
     output_filename = os.path.join("tmp_files", file_name)
     os.makedirs("tmp_files", exist_ok=True)
 
-    all_sales_orderss = []
+    all_sales_orders = []
 
     # Process users in parallel
     with ThreadPoolExecutor(max_workers=4) as executor:
@@ -192,12 +192,12 @@ def main():
         for user_sales_orders in results:
             all_sales_orders.extend(user_sales_orders)
 
-    # Write all credit notes to a single CSV file
-    with open(output_filename, mode='w', newline='', encoding='utf-8') as csv_file:
+    # Write all sales orders to a single CSV file
+    with open(file_name, mode='w', newline='', encoding='utf-8') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
-        for credit_note in all_credit_notes:
-            writer.writerow(credit_note)
+        for sales_orders in all_sales_orders:
+            writer.writerow(sales_orders)
 
     logging.info(f"Data successfully written locally at {output_filename}")
 
