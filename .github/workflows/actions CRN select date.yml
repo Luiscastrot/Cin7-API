@@ -30,6 +30,8 @@ jobs:
           ARNL_KEY: ${{ secrets.ARNL_KEY }}
           ARF_KEY: ${{ secrets.ARF_KEY }}
         run: python Credit_Notes/Select_Date_CRN.py
+      - name: Debug ENV
+        run: echo "ENV_CUSTOM_DATE_FILE=${{ env.ENV_CUSTOM_DATE_FILE }}"
 
       - name: Upload File to Dropbox
         uses: ./upload-dropbox-action
