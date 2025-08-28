@@ -147,11 +147,13 @@ def main():
     'lineItemcode', 'lineItemName','status','stage','projectName','internalComments', 'lineItemQty', 'lineItemoption3', 'lineItemUnitPrice', 
     'lineItemDiscount', 'createdDate', 'estimatedDeliveryDate', 'fullyReceivedDate']
     
-    file_name = f"purchase_orders_Daily.csv"
-    
-     # Saves it in a temporal file 
+      # Saves it in a temporal file 
     output_filename = os.path.join("tmp_files", file_name)
     os.makedirs("tmp_files", exist_ok=True)
+    all_purchase_orders = []
+
+    
+
     all_purchase_orders = []
 
     # Process users in parallel
