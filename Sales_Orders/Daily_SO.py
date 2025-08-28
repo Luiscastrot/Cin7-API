@@ -198,10 +198,9 @@ def main():
     
     file_name = f"Sales_Orders_{start_date.strftime('%Y%m%d')}_{end_date.strftime('%Y%m%d')}.csv"
 
-    env_file = os.getenv('GITHUB_ENV') 
-    with open(env_file, "a") as env_file:    
-        env_file.write(f"ENV_CUSTOM_DATE_FILE={file_name}")
-
+       # Saves it in a temporal file 
+    output_filename = os.path.join("tmp_files", file_name)
+    os.makedirs("tmp_files", exist_ok=True)
     all_sales_orders = []
 
     # Process users in parallel
@@ -210,34 +209,30 @@ def main():
         for user_sales_orders in results:
             all_sales_orders.extend(user_sales_orders)
 
-    # Write all sales orders to a single CSV file
-    with open(file_name, mode='w', newline='', encoding='utf-8') as csv_file:
+    # Write all credit notes to a single CSV file
+    with open(output_filename, mode='w', newline='', encoding='utf-8') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
-        for sales_orders in all_sales_orders:
-            writer.writerow(sales_orders)
+        for credit_note in all_credit_notes:
+            writer.writerow(credit_note)
 
-    logging.info(f"Data successfully written to {file_name}")
-    logging.info(f"Date range used for filtering: Start: {start_date.strftime('%Y-%m-%d %H:%M:%S %Z')} - End: {end_date.strftime('%Y-%m-%d %H:%M:%S %Z')}")
-   
-    for user in USERS:
-        user_usage = get_api_usage(user['username'])
-        logging.info(f"Final API Usage for {user['username']}: {user_usage['api_calls']} calls")
+    logging.info(f"Data successfully written locally at {output_filename}")
 
-    # Guardar errores en CSV
-    error_file = "errores_sales_orders.csv"
-    fieldnames_error = ['user', 'order_id', 'reference', 'error', 'timestamp']
+# Export the EXACT path for the workflow
+    gh_env = os.getenv('GITHUB_ENV')
+    output_filename_abs = os.path.abspath(output_filename) 
+    output_filename_base = os.path.basename(output_filename)
 
-    if errores_globales:
-        with open(error_file, mode='w', newline='', encoding='utf-8') as error_csv:
-            writer = csv.DictWriter(error_csv, fieldnames=fieldnames_error)
-            writer.writeheader()
-            for err in errores_globales:
-                writer.writerow(err)
-        logging.info(f"Errores guardados en {error_file}")
+    if gh_env:
+        with open(gh_env, "a") as env_file:
+            env_file.write(f"ENV_CUSTOM_DATE_FILE={output_filename_abs}\n")       
+            env_file.write(f"ENV_CUSTOM_DATE_FILE_NAME={output_filename_base}\n")
+
+        logging.info(f"Exported ENV_CUSTOM_DATE_FILE={output_filename_abs}")
+        logging.info(f"Exported ENV_CUSTOM_DATE_FILE_NAME={output_filename_base}")
+
     else:
-        logging.info("No se detectaron errores durante el procesamiento.")
-
+        logging.warning("GITHUB_ENV not set; cannot export ENV_CUSTOM_DATE_FILE.")
 
 if __name__ == "__main__":
     main()

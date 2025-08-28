@@ -152,10 +152,6 @@ def main():
     os.makedirs("tmp_files", exist_ok=True)
     all_purchase_orders = []
 
-    
-
-    all_purchase_orders = []
-
     # Process users in parallel
     with ThreadPoolExecutor(max_workers=4) as executor:
         results = executor.map(process_user, USERS)

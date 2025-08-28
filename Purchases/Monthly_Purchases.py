@@ -170,10 +170,6 @@ def main():
         for user_purchase_orders in results:
             all_purchase_orders.extend(user_purchase_orders)
 
-      # Saves it in a temporal file 
-    output_filename = os.path.join("tmp_files", file_name)
-    os.makedirs("tmp_files", exist_ok=True)
-    all_purchase_orders = []
 
 
     # Write all purchase orders to a single CSV file
