@@ -180,9 +180,9 @@ def main():
 
     file_name = f"Credit_Notes_{start_date.strftime('%Y%m%d')}_{end_date.strftime('%Y%m%d')}.csv"
 
-    # Guarda SIEMPRE en la carpeta Credit_Notes/
-    output_filename = os.path.join("Credit_Notes", file_name)
-    os.makedirs("Credit_Notes", exist_ok=True)
+    # Saves it in a temporal file 
+    output_filename = os.path.join("tmp_files", file_name)
+    os.makedirs("tmp_files", exist_ok=True)
 
     all_credit_notes = []
     with ThreadPoolExecutor(max_workers=4) as executor:
@@ -198,7 +198,7 @@ def main():
 
     logging.info(f"Data successfully written locally at {output_filename}")
 
-    # Exporta la ruta EXACTA para el workflow
+# Export the EXACT path for the workflow
     gh_env = os.getenv('GITHUB_ENV')
     output_filename_abs = os.path.abspath(output_filename) 
     output_filename_base = os.path.basename(output_filename)
