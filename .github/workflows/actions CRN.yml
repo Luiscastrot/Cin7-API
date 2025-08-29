@@ -2,8 +2,8 @@ name: run Weekly_CRN.py
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '10 4 * * 6,0,1'
+  #schedule:
+    #- cron: '10 4 * * 6,0,1'
 
 jobs:
   build:
