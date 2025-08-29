@@ -218,6 +218,18 @@ def main():
 
     logging.info(f"Data successfully written locally at {output_filename}")
 
+        # Write errors to a CSV file (always create it)
+    errores_filename = "errores_sales_orders.csv"
+    with open(errores_filename, mode='w', newline='', encoding='utf-8') as error_file:
+        fieldnames = ["user", "order_id", "reference", "error", "timestamp"]
+        writer = csv.DictWriter(error_file, fieldnames=fieldnames)
+        writer.writeheader()
+        for err in errores_globales:
+            writer.writerow(err)
+
+    logging.info(f"Errores file written locally at {errores_filename}")
+
+
 # Export the EXACT path for the workflow
     gh_env = os.getenv('GITHUB_ENV')
     output_filename_abs = os.path.abspath(output_filename) 
