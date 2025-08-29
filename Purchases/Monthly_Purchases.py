@@ -157,15 +157,6 @@ def main():
     all_purchase_orders = []
 
 
-    if env_file:
-        try:
-            with open(env_file, "a") as env_file:    
-                env_file.write(f"ENV_CUSTOM_DATE_FILE={output_filename}")
-        except IOError as e:
-            logging.error(f"Error writing to env file: {str(e)}")
- 
-    all_purchase_orders = []
-
 # Process users in parallel
     with ThreadPoolExecutor(max_workers=4) as executor:
         results = executor.map(process_user, USERS)
