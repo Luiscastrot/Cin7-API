@@ -270,7 +270,7 @@ def main():
     
     env_file = os.getenv('GITHUB_ENV')
     with open(env_file, "a") as env_file:
-        env_file.write(f"ENV_CUSTOM_DATE_FILE={file_name}")
+        env_file.write(f"ENV_CUSTOM_DATE_FILE_NAME={file_name}")
     
     logging.info(f"Data successfully written to {file_name}")
     logging.info(f"Date range used for filtering: Start: {start_date.strftime('%Y-%m-%d %H:%M:%S %Z')} - End: {end_date.strftime('%Y-%m-%d %H:%M:%S %Z')}")
