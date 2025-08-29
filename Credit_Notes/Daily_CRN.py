@@ -192,7 +192,7 @@ def main():
             all_credit_notes.extend(user_credit_notes)
 
     # Write all credit notes to a single CSV file
-    with open(file_name, mode='w', newline='', encoding='utf-8') as csv_file:
+    with open(output_filename, mode='w', newline='', encoding='utf-8') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
         for credit_note in all_credit_notes:
