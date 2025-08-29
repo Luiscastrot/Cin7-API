@@ -160,7 +160,7 @@ def main():
     if env_file:
         try:
             with open(env_file, "a") as env_file:    
-                env_file.write(f"ENV_CUSTOM_DATE_FILE={file_name}")
+                env_file.write(f"ENV_CUSTOM_DATE_FILE={output_filename}")
         except IOError as e:
             logging.error(f"Error writing to env file: {str(e)}")
  
