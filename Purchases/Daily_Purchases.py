@@ -58,10 +58,9 @@ def parse_date(date_string):
 
 def calculate_date_range():
     today = datetime.datetime.now(pytz.utc)
-    twelve_months_ago = today - datetime.timedelta(days=365)
-    twelve_months_ago = twelve_months_ago.replace(hour=0, minute=0, second=0, microsecond=0)
+    start_date = datetime.datetime(2024, 1, 1, tzinfo=pytz.utc)  # (Year, Month, Day, Hour, Minute, Second, ...,)
     today = today.replace(hour=23, minute=59, second=59, microsecond=999999)
-    return twelve_months_ago, today
+    return start_date, today
 
 def is_valid_purchase_order(purchase_order, start_date, end_date):
     # Check if the purchase order is not void
@@ -147,7 +146,7 @@ def main():
     'lineItemcode', 'lineItemName','status','stage','projectName','internalComments', 'lineItemQty', 'lineItemoption3', 'lineItemUnitPrice', 
     'lineItemDiscount', 'createdDate', 'estimatedDeliveryDate', 'fullyReceivedDate']
     
-    file_name = f"Purchase_Orders_{start_date.strftime('%Y%m%d')}_{end_date.strftime('%Y%m%d')}.csv"  
+    file_name = f"purchase_orders_Daily.csv"
 
       # Saves it in a temporal file 
     output_filename = os.path.join("tmp_files", file_name)
