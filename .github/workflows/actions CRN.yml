@@ -31,8 +31,13 @@ jobs:
           ARF_KEY: ${{ secrets.ARF_KEY }}
         run: python Credit_Notes/Weekly_CRN.py
 
+      - name: List tmp_files
+        run: ls -lh tmp_files
+
       - name: Debug ENV
-        run: echo "ENV_CUSTOM_DATE_FILE=${{ env.ENV_CUSTOM_DATE_FILE }}"
+        run: |
+          echo "ENV_CUSTOM_DATE_FILE=${{ env.ENV_CUSTOM_DATE_FILE }}"
+          echo "ENV_CUSTOM_DATE_FILE_NAME=${{ env.ENV_CUSTOM_DATE_FILE_NAME }}"
 
       - name: Upload File to Dropbox
         uses: ./upload-dropbox-action
