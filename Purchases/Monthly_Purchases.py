@@ -93,7 +93,6 @@ def process_purchase_order(purchase_order, user_name):
         adjusted_discount = round(discount * currency_rate, 2)
 
         results.append({
-        'sourceUser': user_name,
             'downloadSource': abbreviated_user_name,
             'reference': purchase_order.get('reference'),
             'company': purchase_order.get('company'),
@@ -146,7 +145,7 @@ def process_user(user):
 def main():
     start_date, end_date = calculate_date_range()
     
-    fieldnames = ['downloadSource', 'sourceUser', 'reference', 'company', 'firstName', 'lastName','projectName','source','currencyCode', 
+    fieldnames = ['downloadSource', 'reference', 'company', 'firstName', 'lastName','projectName','source','currencyCode', 
     'lineItemcode', 'lineItemName',   'lineItemQty',  'lineItemUnitPrice', 'lineItemDiscount','lineItemoption3', 'fullyReceivedDate'] 
     
     file_name = f"Purchase_Orders_{start_date.strftime('%Y%m%d')}_{end_date.strftime('%Y%m%d')}.csv"  
